@@ -16,8 +16,12 @@ from createVNEInstance import *
 
 # Function to create random substrate network
 def create_random_network(graph, tag, prefix, connected):
-    """ Creates a pure random graph with <numberNodes> nodes and probability 
-        <alpha> for an edge between two nodes"""
+    """ Creates a random substrate network based on the range of node numbers
+    selected by the user and the <edgeProbability> value for connecting two
+    substrate nodes.
+    Additional Substrate Network Attributes:
+    	Substrate Node : Longitude and Latitude, Capacity, Node Emedding Cost.
+	Substrate Edge : Bandwidhth Capacity, Link Embedding Cost, Edge Probability."""
     
     numberNodes = random.randint(int(tag.getAttribute("minNumberNodes")), 
                                  int(tag.getAttribute("maxNumberNodes")))
@@ -59,7 +63,7 @@ def create_random_network(graph, tag, prefix, connected):
             maxDelay = round((distance / 204.357),1)
             graph.addEdge(SubstrateEdge(len(graph.edges),j, graph.nodes[-1].id,
                                         capacity, costs, distance, maxDelay))
-	### Creating edges ###
+    ### Creating edges ###
     for i in range(len(graph.nodes) - numberNodes, len(graph.nodes)):
         for j in range(i+1, len(graph.nodes)):
             if random.random() <= alpha and graph.hasEdge(i,j) == False: 
@@ -82,9 +86,15 @@ def create_random_network(graph, tag, prefix, connected):
                                              costs, distance, maxDelay))
 
 
+# Function to create Random Service Request
 def create_random_request(substrate, graph, tag, prefix, connected):    
-    """ Creates a pure random graph with <numberNodes> nodes and 
-        probability <alpha> for an edge between two nodes"""
+    """ Creates a random service request based on the range of virtual node numbers
+    selected by the user and the <edgeProbability> value for connecting two
+    virtual nodes.
+    Additional Service Request Attributes:
+    	Virtual Node : Node Number Range, Capacity Demand, Suitable Substrate Candidate Range,
+		       Customer Node Number Range
+	Virtual Edge : Bandwidhth Demand, Bounde Tx-delay Range, Edge Probability."""
     
     numberNodes = random.randint(int(tag.getAttribute("minNumberNodes")), 
                                  int(tag.getAttribute("maxNumberNodes")))
@@ -97,7 +107,8 @@ def create_random_request(substrate, graph, tag, prefix, connected):
     max_candidates = int(tag.getAttribute("maxNumberCandidates"))
     min_customers = int(tag.getAttribute("minNumberCustomers"))
     max_customers = int(tag.getAttribute("maxNumberCustomers"))
-	### Creating nodes ###
+    
+    ### Creating nodes ###
     for i in range(numberNodes):
         capacity = round(random.random() * n_cap_range + min_n_cap, 1) 
         candidates = []
@@ -110,7 +121,7 @@ def create_random_request(substrate, graph, tag, prefix, connected):
             candidates =  candidates[:num_candidates]
         graph.addNode(VirtualNode(len(graph.nodes), prefix + `i`, candidates, 
                                   capacity))
-		### add edges to ensure connectivity 
+	### add edges to ensure connectivity 
         if connected and i > 0:
             j = random.randint(graph.nodes[-1].id - i, graph.nodes[-1].id -1)
             capacity = round(random.random() * e_cap_range + min_e_cap, 1)
@@ -119,7 +130,8 @@ def create_random_request(substrate, graph, tag, prefix, connected):
                                       random.randint(
                                         int(tag.getAttribute("minEdgeDelay")),
                                         int(tag.getAttribute("maxEdgeDelay")))))
-	### Creating edges ###
+    
+    ### Creating edges ###
     for i in range(len(graph.nodes) - numberNodes, len(graph.nodes)):
         for j in range(i+1, len(graph.nodes)):
             if random.random() <= alpha and graph.hasEdge(i,j) == False: 
@@ -153,8 +165,11 @@ def create_random_request(substrate, graph, tag, prefix, connected):
                                     int(tag.getAttribute("maxEdgeDelay")))))
 
 
+# Function to write a Random VNE Instance in XML format
 def create_randomnet_vne(graph, requests, outFileName):
-    """Writes a xml file containing the nework information to <outFileName>"""
+    """Generates a XML file containing the random substrate nework and random service requests
+    based on the user-seleceted parameter file and saves in the current working directory."""
+
     doc = minidom.Document()	
     root = doc.createElement("VNEInstance")
     root.setAttribute("version" , 0)
@@ -231,7 +246,12 @@ def create_randomnet_vne(graph, requests, outFileName):
     doc.writexml(outFile, "   ", "\t", "\n", "utf-8")
 
 
+# Function to create a Fixed Substrate Network and Random Service Requests
 def create_fixednet_vne(networkFileName, requests, outputFileName):
+    """Generates a XML file containing the Fixed substrate nework based on the user-selected
+    any previously generated VNE instance and random service requests based on the user-seleceted
+    parameter file,which saves in the current working directory."""
+
     readData_substrateNetwork = parse(networkFileName)
     substrateNodes = readData_substrateNetwork.getElementsByTagName("node")
     substrateEdges = readData_substrateNetwork.getElementsByTagName("edge")   
@@ -313,14 +333,17 @@ def create_fixednet_vne(networkFileName, requests, outputFileName):
     doc.writexml(outFile, "   ", "\t", "\n", "utf-8")
 
 
+# Function to determine the number of generated service requests based on user-set number
 def generate_requests(substrate,tag):
-	"""Generates requests according to the values given in the requests tag."""
-	requests = []
-	for i in range( int(tag.getAttribute("numberOfRequests"))):
-		requests.append(VirtualGraph(i, [], [], {} ))
-		create_random_request(substrate, requests[-1], tag, "", True  )
+    """Determines the number of service requests generation according to the value
+    given in the requests tag."""
+    requests = []
+    for i in range( int(tag.getAttribute("numberOfRequests"))):
+	requests.append(VirtualGraph(i, [], [], {} ))
+	create_random_request(substrate, requests[-1], tag, "", True  )
 	return requests
 
+# Definie the main function
 def main(argv):
     description='Random and Fixed Network VNE Instance Creator'    
     parser = argparse.ArgumentParser(description=description)    
