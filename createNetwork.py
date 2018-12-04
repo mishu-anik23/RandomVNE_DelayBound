@@ -325,29 +325,29 @@ def main(argv):
     description='Random and Fixed Network VNE Instance Creator'    
     parser = argparse.ArgumentParser(description=description)    
     parser.add_argument('-i','--info',
-                        action='store_true',
-                        dest='infoFlag',
-                        default=False,
-                        required=False,
-                        help='show transformation information')      
+			action='store_true',
+			dest='infoFlag',
+			default=False,
+			required=False,
+			help='show transformation information')      
     parser.add_argument('-o','--outputFile',
-        		action='store',
-                        dest='output',
-                        metavar='outputVNEProblemFile',
+			action='store',
+			dest='output',
+			metavar='outputVNEProblemFile',
 			default="",
 			help='Output file name of generated VNE Problem')    
     parser.add_argument('--input','--inputSNFile',
 			dest='inputNetworkInstance',
-	                metavar='inputNetworkInstanceFile',
+			metavar='inputNetworkInstanceFile',
 			default="",
 			help='input Substrate Network Instance file name') 
     parser.add_argument('--xml',
-                        action='store',
-                        dest='paramFile',
-                        metavar='graphParameter',
-                        default=None,
-                        required=True,
-                        help='Parameter file for graph construction')
+			action='store',
+			dest='paramFile',
+			metavar='graphParameter',
+			default=None,
+			required=True,
+			help='Parameter file for graph construction')
     global args
     args = parser.parse_args()
     doc = parse(args.paramFile)
