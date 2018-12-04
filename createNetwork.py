@@ -331,16 +331,16 @@ def main(argv):
                         required=False,
                         help='show transformation information')      
     parser.add_argument('-o','--outputFile',
-        					  action='store',
+        		action='store',
                         dest='output',
                         metavar='outputVNEProblemFile',
-							  default="",
-							  help='Output file name of generated VNE Problem')    
+			default="",
+			help='Output file name of generated VNE Problem')    
     parser.add_argument('--input','--inputSNFile',
-							  dest='inputNetworkInstance',
-	                     metavar='inputNetworkInstanceFile',
-							  default="",
-							  help='input Substrate Network Instance file name') 
+			dest='inputNetworkInstance',
+	                metavar='inputNetworkInstanceFile',
+			default="",
+			help='input Substrate Network Instance file name') 
     parser.add_argument('--xml',
                         action='store',
                         dest='paramFile',
