@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<pureRandom id="1.1" minNumberNodes="7" maxNumberNodes="10" minNodeCost ="50.0" maxNodeCost ="100.0" edgeProbability="0.3" minNodeCapacity="50" maxNodeCapacity="100" minEdgeCapacity="40" maxEdgeCapacity="80" >
+    <requests id="1.2" numberOfRequests="20" minNumberNodes="2" maxNumberNodes="4" edgeProbability="0.1" minNodeCapacity="5" maxNodeCapacity="10" minEdgeCapacity="4" maxEdgeCapacity="8" minEdgeDelay="5" maxEdgeDelay="20" minNumberCandidates="3" maxNumberCandidates="5" minNumberCustomers="1" maxNumberCustomers="3"></requests>
+</pureRandom>
